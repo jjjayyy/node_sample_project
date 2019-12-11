@@ -1,31 +1,18 @@
-var express = require('express');
-var router = express.Router();
-
-/*
+const express = require('express');
+const router = express.Router();
 const mysql = require('mysql');
-const connection = mysql.createConnection({
-  host : 'localhost',
-  user : process.env.MYSQL_ID,
-  password : process.env.MYSQL_PW,
-  port : 3306,
-  database : 'mysql'
-});
+const dbconfig = require('../config/db_config.js');
+const connection = mysql.createConnection(dbconfig);
 
-connection.connect();
+require('dotenv').config();
 
-connection.query('SELECT * FROM SAMPLE', function(err, rows, fields) {
-  if(!err)
-    console.log('The solution is : ', rows);
-  else
-    console.log('Error while performing Query.', err);
-});
+router.get('/',(req,res) =>
+    connection.query('SELECT * FROM SAMPLE', function(err, rows) {
+        if(err) throw err;
 
-connection.end();
-*/
-console.log("ID : " + process.env.MYSQL_ID);
-console.log("PW : " + process.env.MYSQL_PW);
-console.log("NODE : " + process.env.NODE_ENV);
-router.get('/', (req, res) =>  res.send("pw ::: " + process.env.MYSQL_PW));
+        console.log(rows);
+        res.send(rows);
+}));
 
 module.exports = router;
 
